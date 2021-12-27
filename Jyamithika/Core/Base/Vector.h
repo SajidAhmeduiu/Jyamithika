@@ -83,7 +83,15 @@ namespace jmk {
 	typedef Vector<float, DIM3>		Vector3f;
 
 
+	//The first template line has to be added because the Vector class is a class template
+	//In case that we define a function member outside the declaration of the class template, 
+	//we must always precede that definition with the template <...> prefix:
 	template<typename coordinate_type, size_t dimensions>
+	//The inline keyword can be avoided without changing much
+	//The const at the end of the funtion header tells that this function cannot modify any member variables of the class
+	//The const right before the Vector reference parameter tells that contents of the incoming parameter vector cannot be changed in the function
+	//The angle brackets with template parameter names before ::operator is also a requirement 
+	//It specifies that this function's template parameter is also the class template parameters
 	inline bool Vector<coordinate_type, dimensions>::operator==(const Vector<coordinate_type, dimensions>& _other) const
 	{
 		for (int i = 0; i < dimensions; i++)
@@ -98,6 +106,8 @@ namespace jmk {
 	template<typename coordinate_type, size_t dimensions>
 	inline bool Vector<coordinate_type, dimensions>::operator!=(const Vector<coordinate_type, dimensions>& _other) const
 	{
+		// The *this deferences the this pointer and makes it suitable for passing to the functions
+		// which are expecting references (not a pointer like this without dereferencing) of the vector class
 		return !(*this == _other);
 	}
 	
